@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import './LoginPage.css'; // <-- 1. Impor file CSS
 
 export default function LoginPage() {
   // State untuk email dan password
@@ -35,38 +36,49 @@ export default function LoginPage() {
 
     } catch (error) {
       // Jika gagal
-      console.error('Login gagal:', error.response.data);
-      alert('Login gagal: ' + error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Terjadi kesalahan";
+      console.error('Login gagal:', errorMessage);
+      alert('Login gagal: ' + errorMessage);
     }
   };
 
   return (
-    <div>
-      <h1>Halaman Login</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      <p>
-        Belum punya akun? <Link to="/register">Registrasi di sini</Link>
-      </p>
+    // 2. Tambahkan className
+    <div className="login-page"> 
+      <div className="login-container">
+        <h1 className="login-title">Selamat Datang</h1>
+        
+        <form onSubmit={handleSubmit} className="login-form">
+          
+          <div className="input-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email" // Tambahkan id untuk 'htmlFor' di label
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              id="password" // Tambahkan id untuk 'htmlFor' di label
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <button type="submit">Masuk</button>
+        </form>
+        
+        <p className="register-link">
+          Belum punya akun? <Link to="/register">Registrasi di sini</Link>
+        </p>
+      </div>
     </div>
   );
 }

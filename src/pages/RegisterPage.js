@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // <-- 2. Tambahkan Link
 import axios from 'axios';
+import './RegisterPage.css'; // <-- 1. Impor file CSS
 
 export default function RegisterPage() {
   // State untuk menyimpan data form
@@ -37,51 +38,69 @@ export default function RegisterPage() {
 
     } catch (error) {
       // Jika gagal
-      console.error('Registrasi gagal:', error.response.data);
-      alert('Registrasi gagal: ' + error.response.data.message);
+      const errorMessage = error.response?.data?.message || "Terjadi kesalahan";
+      console.error('Registrasi gagal:', errorMessage);
+      alert('Registrasi gagal: ' + errorMessage);
     }
   };
 
   return (
-    <div>
-      <h1>Halaman Registrasi</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nama:</label>
-          <input
-            type="text"
-            value={nama}
-            onChange={(e) => setNama(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Role:</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="mahasiswa">Mahasiswa</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
-        <button type="submit">Register</button>
-      </form>
+    // 3. Tambahkan className
+    <div className="register-page">
+      <div className="register-container">
+        <h1 className="register-title">Buat Akun</h1>
+        
+        <form onSubmit={handleSubmit} className="register-form">
+          
+          <div className="input-group">
+            <label htmlFor="nama">Nama:</label>
+            <input
+              id="nama"
+              type="text"
+              value={nama}
+              onChange={(e) => setNama(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label htmlFor="role">Role:</label>
+            <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
+              <option value="mahasiswa">Mahasiswa</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          
+          <button type="submit">Daftar</button>
+        </form>
+
+        {/* 4. Tambahkan link kembali ke Login */}
+        <p className="login-link">
+          Sudah punya akun? <Link to="/login">Login di sini</Link>
+        </p>
+      </div>
     </div>
   );
 }
