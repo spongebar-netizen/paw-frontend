@@ -1,37 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './DashboardPage.css'; // <-- 1. Impor file CSS
 
 export default function DashboardPage() {
   const navigate = useNavigate();
 
-  // Fungsi untuk menangani logout
+  // --- Logika logout tetap sama ---
   const handleLogout = () => {
-    // 1. Hapus token dari localStorage
     localStorage.removeItem('token');
-    
     alert('Anda telah logout.');
-
-    // 2. Arahkan kembali ke halaman login
     navigate('/login');
   };
 
   return (
-    // 2. Tambahkan className
-    <div className="dashboard-page"> 
-      <div className="dashboard-container">
+    // Container Utama
+    <div className="flex items-center justify-center min-h-screen p-4">
+      
+      {/* Kartu Kaca (Glassmorphism) */}
+      <div className="w-full max-w-md p-8 space-y-6 text-center bg-white bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl">
         
-        <h1 className="dashboard-title">Dashboard</h1>
+        {/* Header */}
+        <h1 className="text-4xl font-bold text-white">
+          Dashboard
+        </h1>
         
-        <p className="dashboard-welcome">
+        <p className="text-lg text-gray-200">
           Selamat datang! Anda berhasil login.
         </p>
         
         {/* Tombol Logout */}
-        <button onClick={handleLogout} className="logout-button">
-          Logout
-        </button>
-        
+        <div>
+          <button 
+            onClick={handleLogout}
+            className="w-full px-4 py-3 font-bold text-white bg-red-600 rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-400 transition duration-300"
+          >
+            Logout
+          </button>
+        </div>
+
       </div>
     </div>
   );

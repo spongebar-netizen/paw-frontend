@@ -1,82 +1,100 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './LoginPage.css'; // <-- 1. Impor file CSS
 
 export default function LoginPage() {
-  // State untuk email dan password
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
   const navigate = useNavigate();
 
+  // --- Logika form tetap sama ---
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Pastikan backend-mu (NIM-NODE-SERVER) berjalan di port 3001
     const apiBackend = 'http://localhost:3001/api/auth/login';
-
     try {
-      // Kirim data login ke API
-      const response = await axios.post(apiBackend, {
-        email: email,
-        password: password,
-      });
-
-      // Jika sukses (API mengembalikan token)
+      const response = await axios.post(apiBackend, { email, password });
       const { token } = response.data;
-
-      // Simpan token ke localStorage
       localStorage.setItem('token', token);
-      
       console.log('Login berhasil, token disimpan:', token);
-      
-      // Arahkan pengguna ke halaman dashboard
       navigate('/dashboard');
-
     } catch (error) {
-      // Jika gagal
-      const errorMessage = error.response?.data?.message || "Terjadi kesalahan";
-      console.error('Login gagal:', errorMessage);
-      alert('Login gagal: ' + errorMessage);
+      console.error('Login gagal:', error.response.data);
+      alert('Login gagal: ' + error.response.data.message);
     }
   };
 
+  // --- Tampilan JSX kita ubah total ---
   return (
-    // 2. Tambahkan className
-    <div className="login-page"> 
-      <div className="login-container">
-        <h1 className="login-title">Selamat Datang</h1>
+    // Container Utama: Memenuhi layar, gradien, dan di tengah
+    <div className="flex items-center justify-center min-h-screen p-4">
+      
+      {/* Kartu Kaca (Glassmorphism) */}
+      <div className="w-full max-w-md p-8 space-y-6 bg-white bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl">
         
-        <form onSubmit={handleSubmit} className="login-form">
-          
-          <div className="input-group">
-            <label htmlFor="email">Email:</label>
+        {/* Header */}
+        <h1 className="text-4xl font-bold text-center text-white">
+          Login
+        </h1>
+        <p className="text-center text-gray-200">
+          Selamat datang kembali!
+        </p>
+        
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          {/* Email */}
+          <div>
+            <label 
+              htmlFor="email" 
+              className="block text-sm font-medium text-white"
+            >
+              Alamat Email
+            </label>
             <input
-              id="email" // Tambahkan id untuk 'htmlFor' di label
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="email@contoh.com"
             />
           </div>
-          
-          <div className="input-group">
-            <label htmlFor="password">Password:</label>
+
+          {/* Password */}
+          <div>
+            <label 
+              htmlFor="password" 
+              className="block text-sm font-medium text-white"
+            >
+              Password
+            </label>
             <input
-              id="password" // Tambahkan id untuk 'htmlFor' di label
+              id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="••••••••"
             />
           </div>
-          
-          <button type="submit">Masuk</button>
+
+          {/* Tombol Submit */}
+          <div>
+            <button 
+              type="submit"
+              className="w-full px-4 py-3 font-bold text-blue-600 bg-white rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-300"
+            >
+              Login
+            </button>
+          </div>
         </form>
-        
-        <p className="register-link">
-          Belum punya akun? <Link to="/register">Registrasi di sini</Link>
+
+        {/* Link ke Registrasi */}
+        <p className="text-sm text-center text-gray-200">
+          Belum punya akun?{' '}
+          <Link to="/register" className="font-medium text-white hover:underline">
+            Registrasi di sini
+          </Link>
         </p>
       </div>
     </div>

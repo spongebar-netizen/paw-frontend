@@ -1,104 +1,126 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // <-- 2. Tambahkan Link
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import './RegisterPage.css'; // <-- 1. Impor file CSS
 
 export default function RegisterPage() {
-  // State untuk menyimpan data form
   const [nama, setNama] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('mahasiswa'); // Default role
-  
-  // Hook untuk navigasi
+  const [role, setRole] = useState('mahasiswa');
   const navigate = useNavigate();
 
-  // Fungsi yang dijalankan saat form disubmit
+  // --- Logika form tetap sama ---
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Mencegah form refresh halaman
-
-    // Pastikan backend-mu (NIM-NODE-SERVER) berjalan di port 3001
+    e.preventDefault();
     const apiBackend = 'http://localhost:3001/api/auth/register';
-
     try {
-      // Kirim data registrasi ke API
-      const response = await axios.post(apiBackend, {
-        nama: nama,
-        email: email,
-        password: password,
-        role: role,
-      });
-
-      // Jika sukses (API mengembalikan data)
+      const response = await axios.post(apiBackend, { nama, email, password, role });
       console.log(response.data);
       alert('Registrasi berhasil! Silakan login.');
-      
-      // Arahkan pengguna ke halaman login
       navigate('/login');
-
     } catch (error) {
-      // Jika gagal
-      const errorMessage = error.response?.data?.message || "Terjadi kesalahan";
-      console.error('Registrasi gagal:', errorMessage);
-      alert('Registrasi gagal: ' + errorMessage);
+      console.error('Registrasi gagal:', error.response.data);
+      alert('Registrasi gagal: ' + error.response.data.message);
     }
   };
 
+  // --- Tampilan JSX kita ubah total ---
   return (
-    // 3. Tambahkan className
-    <div className="register-page">
-      <div className="register-container">
-        <h1 className="register-title">Buat Akun</h1>
+    <div className="flex items-center justify-center min-h-screen p-4">
+      
+      {/* Kartu Kaca (Glassmorphism) */}
+      <div className="w-full max-w-md p-8 space-y-6 bg-white bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-xl">
         
-        <form onSubmit={handleSubmit} className="register-form">
-          
-          <div className="input-group">
-            <label htmlFor="nama">Nama:</label>
+        {/* Header */}
+        <h1 className="text-4xl font-bold text-center text-white">
+          Buat Akun
+        </h1>
+        <p className="text-center text-gray-200">
+          Bergabunglah bersama kami.
+        </p>
+        
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          {/* Nama */}
+          <div>
+            <label htmlFor="nama" className="block text-sm font-medium text-white">
+              Nama Lengkap
+            </label>
             <input
               id="nama"
               type="text"
               value={nama}
               onChange={(e) => setNama(e.target.value)}
               required
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="John Doe"
             />
           </div>
-          
-          <div className="input-group">
-            <label htmlFor="email">Email:</label>
+
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-white">
+              Alamat Email
+            </label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="email@contoh.com"
             />
           </div>
-          
-          <div className="input-group">
-            <label htmlFor="password">Password:</label>
+
+          {/* Password */}
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-white">
+              Password
+            </label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+              placeholder="••••••••"
             />
           </div>
-          
-          <div className="input-group">
-            <label htmlFor="role">Role:</label>
-            <select id="role" value={role} onChange={(e) => setRole(e.target.value)}>
+
+          {/* Role */}
+          <div>
+            <label htmlFor="role" className="block text-sm font-medium text-white">
+              Daftar sebagai
+            </label>
+            <select 
+              id="role"
+              value={role} 
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-2 mt-2 text-gray-900 bg-white bg-opacity-70 border border-transparent rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-white"
+            >
               <option value="mahasiswa">Mahasiswa</option>
               <option value="admin">Admin</option>
             </select>
           </div>
-          
-          <button type="submit">Daftar</button>
+
+          {/* Tombol Submit */}
+          <div>
+            <button 
+              type="submit"
+              className="w-full px-4 py-3 mt-4 font-bold text-blue-600 bg-white rounded-lg shadow-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white transition duration-300"
+            >
+              Register
+            </button>
+          </div>
         </form>
 
-        {/* 4. Tambahkan link kembali ke Login */}
-        <p className="login-link">
-          Sudah punya akun? <Link to="/login">Login di sini</Link>
+        {/* Link ke Login */}
+        <p className="text-sm text-center text-gray-200">
+          Sudah punya akun?{' '}
+          <Link to="/login" className="font-medium text-white hover:underline">
+            Login di sini
+          </Link>
         </p>
       </div>
     </div>
